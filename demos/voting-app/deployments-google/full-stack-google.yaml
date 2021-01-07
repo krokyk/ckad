@@ -37,13 +37,12 @@ metadata:
   name: result-service
 spec:
   ports:
-  - nodePort: 30002
-    port: 80
+  - port: 80
     targetPort: 80
   selector:
     app: demo-voting-app
     name: result-app-pod
-  type: NodePort
+  type: LoadBalancer
 ---
 apiVersion: v1
 kind: Service
@@ -54,13 +53,12 @@ metadata:
   name: voting-service
 spec:
   ports:
-  - nodePort: 30001
-    port: 80
+  - port: 80
     targetPort: 80
   selector:
     app: demo-voting-app
     name: voting-app-pod
-  type: NodePort
+  type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment
