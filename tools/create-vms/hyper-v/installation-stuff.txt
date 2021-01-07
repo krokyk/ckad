@@ -1,0 +1,48 @@
+MASTER
+subnet  192.168.88.0/24
+ip      192.168.88.3
+gateway 192.168.88.1
+dns     192.168.88.1,8.8.8.8,8.8.4.4
+Name:        ckad
+Server name: ckad-master
+User:        ckad
+Pass:        ckad
+
+
+
+WORKER
+subnet  192.168.88.0/24
+ip      192.168.88.4
+gateway 192.168.88.1
+dns     192.168.88.1,8.8.8.8,8.8.4.4
+Name:        ckad
+Server name: ckad-worker
+User:        ckad
+Pass:        ckad
+
+IMPORT THE KEY FROM YOUR GITHUB!!!
+
+##########################################
+Enable root login over SSH
+Login to your server as root.
+As the root user, edit the sshd_config file found in /etc/ssh/sshd_config:
+nano /etc/ssh/sshd_config
+(For details on working with Vim check out our article here!)
+Add the following line to the file, you can add it anywhere but
+it’s good practice to find the block about authentication and add it there.
+
+PermitRootLogin yes
+
+Save and exit the file.
+Restart the SSH server:
+
+systemctl restart sshd
+
+or
+
+service sshd restart
+
+##########################################
+to enable root login
+
+sudo passwd root

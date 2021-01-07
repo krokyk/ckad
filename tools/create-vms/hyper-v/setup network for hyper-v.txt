@@ -1,0 +1,47 @@
+real router IP: 192.168.88.1
+
+1. Create external hyper-v switch
+2. Control Panel -> Network and Sharing Center -> Change adapter settings
+3. Double click on the created vSwitch and set IPs:
+
+   DHCP Enabled. . . . . . . . . . . : No
+   IPv4 Address. . . . . . . . . . . : 192.168.88.2(Preferred)
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 192.168.88.1
+   DNS Servers . . . . . . . . . . . : 192.168.88.1
+                                       8.8.8.8
+                                       8.8.4.4
+
+VMs
+nano /etc/netplan/00-installer-config.yaml
+netplan apply
+
+VM #1
+network:
+  ethernets:
+    eth0:
+      addresses:
+      - 192.168.88.3/24
+      gateway4: 192.168.88.1
+      nameservers:
+        addresses:
+        - 192.168.88.1
+        - 8.8.8.8
+        - 8.8.4.4
+  version: 2
+MAC for vSwitch in Hyper-V: 00:15:5d:00:27:12
+
+VM #2
+network:
+  ethernets:
+    eth0:
+      addresses:
+      - 192.168.88.4/24
+      gateway4: 192.168.88.1
+      nameservers:
+        addresses:
+        - 192.168.168.1
+        - 8.8.8.8
+        - 8.8.4.4
+  version: 2
+MAC for vSwitch in Hyper-V: 00:15:5d:00:27:13

@@ -1,0 +1,196 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: demo-voting-app
+    name: db-service
+  name: db
+spec:
+  ports:
+  - port: 5432
+    targetPort: 5432
+  selector:
+    app: demo-voting-app
+    name: db-pod
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: demo-voting-app
+    name: redis-service
+  name: redis
+spec:
+  ports:
+  - port: 6379
+    targetPort: 6379
+  selector:
+    app: demo-voting-app
+    name: redis-pod
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: demo-voting-app
+    name: result-service
+  name: result-service
+spec:
+  ports:
+  - nodePort: 30002
+    port: 80
+    targetPort: 80
+  selector:
+    app: demo-voting-app
+    name: result-app-pod
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: demo-voting-app
+    name: voting-service
+  name: voting-service
+spec:
+  ports:
+  - nodePort: 30001
+    port: 80
+    targetPort: 80
+  selector:
+    app: demo-voting-app
+    name: voting-app-pod
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: demo-voting-app
+    name: db-deployment
+  name: db-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-voting-app
+      name: db-pod
+  template:
+    metadata:
+      labels:
+        app: demo-voting-app
+        name: db-pod
+      name: db-pod
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: postgres
+        image: postgres
+        name: db-container
+        ports:
+        - containerPort: 5432
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: demo-voting-app
+    name: redis-deployment
+  name: redis-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-voting-app
+      name: redis-pod
+  template:
+    metadata:
+      labels:
+        app: demo-voting-app
+        name: redis-pod
+      name: redis-pod
+    spec:
+      containers:
+      - image: redis
+        name: redis-container
+        ports:
+        - containerPort: 6379
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: demo-voting-app
+    name: result-app-deployment
+  name: result-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-voting-app
+      name: result-app-pod
+  template:
+    metadata:
+      labels:
+        app: demo-voting-app
+        name: result-app-pod
+      name: result-app-pod
+    spec:
+      containers:
+      - image: kodekloud/examplevotingapp_result:v1
+        name: result-app-container
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: demo-voting-app
+    name: voting-app-deployment
+  name: voting-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-voting-app
+      name: voting-app-pod
+  template:
+    metadata:
+      labels:
+        app: demo-voting-app
+        name: voting-app-pod
+      name: voting-app-pod
+    spec:
+      containers:
+      - image: kodekloud/examplevotingapp_vote:v1
+        name: voting-app-container
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: demo-voting-app
+    name: worker-app-deployment
+  name: worker-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-voting-app
+      name: worker-app-pod
+  template:
+    metadata:
+      labels:
+        app: demo-voting-app
+        name: worker-app-pod
+      name: worker-app-pod
+    spec:
+      containers:
+      - image: kodekloud/examplevotingapp_worker:v1
+        name: worker-app-container
