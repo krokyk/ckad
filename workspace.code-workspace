@@ -1,0 +1,18 @@
+{
+    "folders": [
+		{
+			"path": "/c/ckad"
+		}
+	],
+    "settings": {
+        "terminal.integrated.cwd": "${workspaceFolder}",
+        "terminal.integrated.shellArgs.linux": [
+            "--init-file",
+            "${workspaceFolder}/setenv.sh"
+        ],
+        "terminal.integrated.scrollback": 10000,
+        "files.eol": "\n",
+        "cSpell.language": "en"
+    },
+    "cSpell.languageSettings": []
+}

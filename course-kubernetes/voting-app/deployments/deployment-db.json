@@ -1,0 +1,53 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "labels": {
+      "app": "demo-voting-app",
+      "name": "db-deployment"
+    },
+    "name": "db-deployment",
+    "namespace": "default"
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "matchLabels": {
+        "app": "demo-voting-app",
+        "name": "db-pod"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "demo-voting-app",
+          "name": "db-pod"
+        },
+        "name": "db-pod"
+      },
+      "spec": {
+        "containers": [
+          {
+            "env": [
+              {
+                "name": "POSTGRES_USER",
+                "value": "postgres"
+              },
+              {
+                "name": "POSTGRES_PASSWORD",
+                "value": "postgres"
+              }
+            ],
+            "image": "postgres",
+            "name": "db-container",
+            "ports": [
+              {
+                "containerPort": 5432
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

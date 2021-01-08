@@ -1,4 +1,5 @@
 #!/bin/bash
+source ~/.bashrc
 
 THIS_DIR=$( cd "$( dirname "${BASH_SOURCE:-$0}" )" && pwd )
 export K8S_DIR=$(realpath "$THIS_DIR")
@@ -19,8 +20,13 @@ fi
 
 export EDITOR='nano'
 
+#VERSIONS
+KUBECTL_VERSION="1.20.1"
+KUBECTX_VERSION="0.9.1"
+
 export PATH=$TOOLS_DIR\
-:$TOOLS_DIR/kubectl\
+:$TOOLS_DIR/kubectl/$KUBECTL_VERSION\
+:$TOOLS_DIR/kubectx/$KUBECTX_VERSION\
 :$PATH
 
 #some terminal text colors to use in the scripts
@@ -37,9 +43,8 @@ alias k=kubectl
 alias kns=kubens
 alias watch='watch ' # https://unix.stackexchange.com/questions/25327/watch-command-alias-expansion
 alias env='env | sort'
-alias c='clear'
 
-# set bash completion for kubernetes commands
+# bash completion for kubectl
 source <(kubectl completion bash)
 # enable bash completion when using alias
 complete -F __start_kubectl k
